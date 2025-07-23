@@ -18,7 +18,7 @@ func main() {
 	r.Post("/item", addItem)
 	r.Delete("/item/{id:\\d}", delItem)
 */
-	http.ListenAndServe(":5000", r)
+	http.ListenAndServe(":3000", r)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {

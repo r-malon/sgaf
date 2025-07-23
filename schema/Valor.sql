@@ -3,7 +3,6 @@ CREATE TABLE Valor (
 	valor INTEGER NOT NULL,
 	data_inicio DATE NOT NULL,
 	data_fim DATE,
-	CONSTRAINT Valor_PK PRIMARY KEY (id),
-	CONSTRAINT Valor_Item_FK FOREIGN KEY (id) REFERENCES Item(id)
+	FOREIGN KEY (Item_id) REFERENCES Item(id)
 ) STRICT;
 

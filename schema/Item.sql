@@ -4,8 +4,7 @@ CREATE TABLE Item (
 	banda_maxima INTEGER NOT NULL,
 	banda_instalada INTEGER NOT NULL,
 	data_instalacao DATE NOT NULL,
-	CONSTRAINT Item_PK PRIMARY KEY (id),
-	CONSTRAINT Item_AF_FK FOREIGN KEY (id) REFERENCES NewTable(id),
-	CONSTRAINT Item_Local_FK FOREIGN KEY (id) REFERENCES "Local"(id)
+	FOREIGN KEY (AF_id) REFERENCES AF(id),
+	FOREIGN KEY (Local_id) REFERENCES Local(id)
 ) STRICT;
 

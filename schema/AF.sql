@@ -1,10 +1,10 @@
 CREATE TABLE AF (
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	numero INTEGER NOT NULL,
+	numero INTEGER NOT NULL UNIQUE,
 	fornecedor TEXT NOT NULL,
 	descricao TEXT NOT NULL,
 	data_inicial DATE NOT NULL,
-	data_final DATE NOT NULL,
+	data_final DATE NOT NULL CHECK(data_final > data_inicial),
 	status BOOLEAN NOT NULL
 ) STRICT;
 
