@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-const createValor = `-- name: CreateValor :one
-INSERT INTO Valor (valor, data_inicio, data_fim) VALUES (?, ?, ?) RETURNING id, valor, data_inicio, data_fim
+const createValor = `-- name: CreateValor :exec
+INSERT INTO Valor (valor, data_inicio, data_fim) VALUES (?, ?, ?)
 `
 
 type CreateValorParams struct {
@@ -21,16 +21,9 @@ type CreateValorParams struct {
 	DataFim    sql.NullTime `json:"data_fim"`
 }
 
-func (q *Queries) CreateValor(ctx context.Context, arg CreateValorParams) (Valor, error) {
-	row := q.db.QueryRowContext(ctx, createValor, arg.Valor, arg.DataInicio, arg.DataFim)
-	var i Valor
-	err := row.Scan(
-		&i.ID,
-		&i.Valor,
-		&i.DataInicio,
-		&i.DataFim,
-	)
-	return i, err
+func (q *Queries) CreateValor(ctx context.Context, arg CreateValorParams) error {
+	_, err := q.db.ExecContext(ctx, createValor, arg.Valor, arg.DataInicio, arg.DataFim)
+	return err
 }
 
 const deleteValor = `-- name: DeleteValor :exec

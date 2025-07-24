@@ -1,5 +1,5 @@
--- name: CreateValor :one
-INSERT INTO Valor (valor, data_inicio, data_fim) VALUES (?, ?, ?) RETURNING *;
+-- name: CreateValor :exec
+INSERT INTO Valor (valor, data_inicio, data_fim) VALUES (?, ?, ?);
 
 -- name: ListValors :many
 SELECT * FROM Valor;

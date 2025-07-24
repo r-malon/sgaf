@@ -1,5 +1,5 @@
--- name: CreateLocal :one
-INSERT INTO Local (nome) VALUES (?) RETURNING nome;
+-- name: CreateLocal :exec
+INSERT INTO Local (nome) VALUES (?);
 
 -- name: ListLocals :many
 SELECT * FROM Local;

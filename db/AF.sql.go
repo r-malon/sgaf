@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-const createAF = `-- name: CreateAF :one
-INSERT INTO AF (numero, fornecedor, descricao, data_inicial, data_final, status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id, numero, fornecedor, descricao, data_inicial, data_final, status
+const createAF = `-- name: CreateAF :exec
+INSERT INTO AF (numero, fornecedor, descricao, data_inicial, data_final, status) VALUES (?, ?, ?, ?, ?, ?)
 `
 
 type CreateAFParams struct {
@@ -23,8 +23,8 @@ type CreateAFParams struct {
 	Status      bool      `json:"status"`
 }
 
-func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) (AF, error) {
-	row := q.db.QueryRowContext(ctx, createAF,
+func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) error {
+	_, err := q.db.ExecContext(ctx, createAF,
 		arg.Numero,
 		arg.Fornecedor,
 		arg.Descricao,
@@ -32,17 +32,7 @@ func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) (AF, error) 
 		arg.DataFinal,
 		arg.Status,
 	)
-	var i AF
-	err := row.Scan(
-		&i.ID,
-		&i.Numero,
-		&i.Fornecedor,
-		&i.Descricao,
-		&i.DataInicial,
-		&i.DataFinal,
-		&i.Status,
-	)
-	return i, err
+	return err
 }
 
 const deleteAF = `-- name: DeleteAF :exec

@@ -1,5 +1,6 @@
---- name: CreateItem :one
-INSERT INTO Item (descricao, banda_maxima, banda_instalada, data_instalacao) VALUES (?, ?, ?, ?) RETURNING descricao, banda_maxima, banda_instalada, data_instalacao;
+--- name: CreateItem :exec
+INSERT INTO Item (descricao, banda_maxima, banda_instalada, data_instalacao) VALUES (?, ?, ?, ?);
+
 -- name: ListItems :many
 SELECT * FROM Item;
 

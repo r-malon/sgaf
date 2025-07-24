@@ -9,14 +9,13 @@ import (
 	"context"
 )
 
-const createLocal = `-- name: CreateLocal :one
-INSERT INTO Local (nome) VALUES (?) RETURNING nome
+const createLocal = `-- name: CreateLocal :exec
+INSERT INTO Local (nome) VALUES (?)
 `
 
-func (q *Queries) CreateLocal(ctx context.Context, nome string) (string, error) {
-	row := q.db.QueryRowContext(ctx, createLocal, nome)
-	err := row.Scan(&nome)
-	return nome, err
+func (q *Queries) CreateLocal(ctx context.Context, nome string) error {
+	_, err := q.db.ExecContext(ctx, createLocal, nome)
+	return err
 }
 
 const deleteLocal = `-- name: DeleteLocal :exec
