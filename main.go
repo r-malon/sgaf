@@ -5,45 +5,44 @@ import (
 	"html/template"
 	"database/sql"
 	"context"
+	"strconv"
 	"fmt"
 	"log"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	_ "modernc.org/sqlite"
 	"github.com/r-malon/sgaf/db"
 )
 
-var tmpl *template.Template
-var ctx context.Context
-var dbconn *sql.DB
-var q *db.Queries
+var (
+	tmpl *template.Template
+	ctx context.Context
+	dbconn *sql.DB
+	q *db.Queries
+)
 
 func main() {
 	defer dbconn.Close()
 
 	q = db.New(dbconn)
 	q.CreateLocal(ctx, "CMEI")
-	fmt.Print("rteete")
 	l, err := q.ListLocals(ctx)
-	fmt.Printf("%+v %v", l, err)
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Use(middleware.CleanPath)
-	r.Get("/", home)
-/*
-	r.Get("/item", listItems)
-	r.Get("/item/{id:\\d}", getItem)
-	r.Post("/item", addItem)
-	r.Delete("/item/{id:\\d}", delItem)
-*/
-	http.ListenAndServe(":3000", r)
+	fmt.Printf("%+v %v\n", l, err)
+
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.HandleFunc("/{$}", home)
+
+	http.HandleFunc("GET /local/", listLocals)
+	http.HandleFunc("POST /local/", createLocal)
+	http.HandleFunc("PUT /local/", updateLocal)
+	http.HandleFunc("DELETE /local/", deleteLocal)
+
+	http.ListenAndServe(":3000", nil)
 }
 
 func init() {
 	var err error
 	ctx = context.TODO()
-	dbconn, err = sql.Open("sqlite", ":memory:")
+	dbconn, err = sql.Open("sqlite", "test.db")
 
 	if err != nil {
 		log.Fatal(err)
@@ -56,7 +55,32 @@ func init() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	l, _ := q.ListLocals(ctx)
-	fmt.Fprintf(w, "%+v", l)
+	tmpl.ExecuteTemplate(w, "home.html", nil)
 }
 
+func listLocals(w http.ResponseWriter, r *http.Request) {
+	l, _ := q.ListLocals(ctx)
+	tmpl.ExecuteTemplate(w, "listLocals", l)
+}
+
+func deleteLocal(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	if err := q.DeleteLocal(ctx, int64(id)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func createLocal(w http.ResponseWriter, r *http.Request) {
+	if err := q.CreateLocal(ctx, r.FormValue("nome")); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func updateLocal(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	nome := r.FormValue("nome")
+	data := db.UpdateLocalParams{nome, int64(id)}
+	if err := q.UpdateLocal(ctx, data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

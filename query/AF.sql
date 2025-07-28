@@ -9,4 +9,3 @@ UPDATE AF SET numero = ? WHERE numero = ?;
 
 -- name: DeleteAF :exec
 DELETE FROM AF WHERE numero = ?;
-

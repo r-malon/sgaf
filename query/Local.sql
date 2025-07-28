@@ -8,5 +8,4 @@ SELECT * FROM Local;
 UPDATE Local SET nome = ? WHERE id = ?;
 
 -- name: DeleteLocal :exec
-DELETE FROM Local WHERE nome = ?;
-
+DELETE FROM Local WHERE id = ?;

@@ -9,4 +9,3 @@ UPDATE Valor SET valor = ?, data_inicio = ?, data_fim = ? WHERE id = ?;
 
 -- name: DeleteValor :exec
 DELETE FROM Valor WHERE id = ?;
-

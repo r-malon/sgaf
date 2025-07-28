@@ -9,4 +9,3 @@ UPDATE Item SET descricao = ?, banda_maxima = ?, banda_instalada = ?, data_insta
 
 -- name: DeleteItem :exec
 DELETE FROM Item WHERE id = ?;
-

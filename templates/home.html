@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+	<script src="/static/bootstrap.min.js"></script>
+	<script src="/static/htmx.min.js"></script>
+	<title>Sistema de Gestão de Autorizações de Fornecimento</title>
+</head>
+<body>
+	{{template "listLocals" .}}
+	<button class="btn btn-primary" hx-put="/local/{{.Id}}" hx-swap="innerHTML"></div>
+	<div id="" hx-get="/local" hx-trigger="load" hx-swap="innerHTML"></div>
+</body>
+</html>

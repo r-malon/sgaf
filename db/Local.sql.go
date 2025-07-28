@@ -19,11 +19,11 @@ func (q *Queries) CreateLocal(ctx context.Context, nome string) error {
 }
 
 const deleteLocal = `-- name: DeleteLocal :exec
-DELETE FROM Local WHERE nome = ?
+DELETE FROM Local WHERE id = ?
 `
 
-func (q *Queries) DeleteLocal(ctx context.Context, nome string) error {
-	_, err := q.db.ExecContext(ctx, deleteLocal, nome)
+func (q *Queries) DeleteLocal(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteLocal, id)
 	return err
 }
 
