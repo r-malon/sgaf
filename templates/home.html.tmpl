@@ -1,3 +1,4 @@
+{{define "home"}}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,8 +11,8 @@
 	<title>Sistema de Gestão de Autorizações de Fornecimento</title>
 </head>
 <body>
-	{{template "listLocals" .}}
 	<button class="btn btn-primary" hx-put="/local/{{.Id}}" hx-swap="innerHTML"></div>
 	<div id="" hx-get="/local" hx-trigger="load" hx-swap="innerHTML"></div>
 </body>
 </html>
+{{end}}

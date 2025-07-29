@@ -1,86 +1,68 @@
 package main
 
 import (
-	"net/http"
-	"html/template"
-	"database/sql"
 	"context"
-	"strconv"
-	"fmt"
+	"database/sql"
+	"html/template"
 	"log"
+	"net/http"
+	"os"
 
-	_ "modernc.org/sqlite"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/r-malon/sgaf/db"
+	_ "modernc.org/sqlite"
 )
 
 var (
-	tmpl *template.Template
-	ctx context.Context
+	tmpl   *template.Template
+	ctx    context.Context
 	dbconn *sql.DB
-	q *db.Queries
+	q      *db.Queries
 )
+
+type errHandler func(http.ResponseWriter, *http.Request) error
 
 func main() {
 	defer dbconn.Close()
 
-	q = db.New(dbconn)
-	q.CreateLocal(ctx, "CMEI")
 	l, err := q.ListLocals(ctx)
-	fmt.Printf("%+v %v\n", l, err)
+	log.Printf("%+v %v\n", l, err)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/{$}", home)
 
-	http.HandleFunc("GET /local/", listLocals)
-	http.HandleFunc("POST /local/", createLocal)
-	http.HandleFunc("PUT /local/", updateLocal)
-	http.HandleFunc("DELETE /local/", deleteLocal)
+	http.Handle("GET /local/{$}", errHandler(listLocals))
+	http.Handle("POST /local/{$}", errHandler(createLocal))
+	http.Handle("PUT /local/{id}", errHandler(updateLocal))
+	http.Handle("DELETE /local/{id}", errHandler(deleteLocal))
 
-	http.ListenAndServe(":3000", nil)
+	log.Fatal(http.ListenAndServe(os.Getenv("ADDR"), nil))
+}
+
+func home(w http.ResponseWriter, r *http.Request) {
+	tmpl.ExecuteTemplate(w, "home", nil)
+}
+
+func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if err := fn(w, r); err != nil {
+		log.Println(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func init() {
 	var err error
-	ctx = context.TODO()
-	dbconn, err = sql.Open("sqlite", "test.db")
+	dbconn, err = sql.Open("sqlite", os.Getenv("DB_PATH"))
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	if err = dbconn.Ping(); err != nil {
 		log.Fatal(err)
 	}
 
-	tmpl, _ = template.ParseGlob("templates/*.html")
-}
-
-func home(w http.ResponseWriter, r *http.Request) {
-	tmpl.ExecuteTemplate(w, "home.html", nil)
-}
-
-func listLocals(w http.ResponseWriter, r *http.Request) {
-	l, _ := q.ListLocals(ctx)
-	tmpl.ExecuteTemplate(w, "listLocals", l)
-}
-
-func deleteLocal(w http.ResponseWriter, r *http.Request) {
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	if err := q.DeleteLocal(ctx, int64(id)); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func createLocal(w http.ResponseWriter, r *http.Request) {
-	if err := q.CreateLocal(ctx, r.FormValue("nome")); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func updateLocal(w http.ResponseWriter, r *http.Request) {
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	nome := r.FormValue("nome")
-	data := db.UpdateLocalParams{nome, int64(id)}
-	if err := q.UpdateLocal(ctx, data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	q = db.New(dbconn)
+	ctx = context.TODO()
+	tmpl = template.Must(template.ParseGlob("templates/*.html.tmpl"))
 }

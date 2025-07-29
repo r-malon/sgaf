@@ -7,7 +7,7 @@
 *.dll
 *.so
 *.dylib
-*.db
+*.db*
 sgaf
 
 # Test binary, built with `go test -c`
