@@ -36,11 +36,11 @@ func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) error {
 }
 
 const deleteAF = `-- name: DeleteAF :exec
-DELETE FROM AF WHERE numero = ?
+DELETE FROM AF WHERE id = ?
 `
 
-func (q *Queries) DeleteAF(ctx context.Context, numero int64) error {
-	_, err := q.db.ExecContext(ctx, deleteAF, numero)
+func (q *Queries) DeleteAF(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteAF, id)
 	return err
 }
 
@@ -80,15 +80,28 @@ func (q *Queries) ListAFs(ctx context.Context) ([]AF, error) {
 }
 
 const updateAF = `-- name: UpdateAF :exec
-UPDATE AF SET numero = ? WHERE numero = ?
+UPDATE AF SET numero = ?, fornecedor = ?, descricao = ?, data_inicio = ?, data_fim = ?, status = ? WHERE id = ?
 `
 
 type UpdateAFParams struct {
-	Numero   int64 `json:"numero"`
-	Numero_2 int64 `json:"numero_2"`
+	Numero     int64     `json:"numero"`
+	Fornecedor string    `json:"fornecedor"`
+	Descricao  string    `json:"descricao"`
+	DataInicio time.Time `json:"data_inicio"`
+	DataFim    time.Time `json:"data_fim"`
+	Status     bool      `json:"status"`
+	ID         int64     `json:"id"`
 }
 
 func (q *Queries) UpdateAF(ctx context.Context, arg UpdateAFParams) error {
-	_, err := q.db.ExecContext(ctx, updateAF, arg.Numero, arg.Numero_2)
+	_, err := q.db.ExecContext(ctx, updateAF,
+		arg.Numero,
+		arg.Fornecedor,
+		arg.Descricao,
+		arg.DataInicio,
+		arg.DataFim,
+		arg.Status,
+		arg.ID,
+	)
 	return err
 }

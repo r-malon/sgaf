@@ -36,6 +36,11 @@ func main() {
 	http.Handle("PUT /local/{id}", errHandler(updateLocal))
 	http.Handle("DELETE /local/{id}", errHandler(deleteLocal))
 
+	http.Handle("GET /af/{$}", errHandler(listAFs))
+	http.Handle("POST /af/{$}", errHandler(createAF))
+	http.Handle("PUT /af/{id}", errHandler(updateAF))
+	http.Handle("DELETE /af/{id}", errHandler(deleteAF))
+
 	log.Fatal(http.ListenAndServe(os.Getenv("ADDR"), nil))
 }
 
@@ -48,6 +53,14 @@ func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func first[T, U any](v T, d U) T {
+	switch any(d).(type) {
+	case error:
+		log.Printf("%v\n", d)
+	}
+	return v
 }
 
 func init() {

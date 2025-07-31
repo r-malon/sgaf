@@ -18,7 +18,11 @@
 			<td>{{.Descricao}}</td>
 			<td>{{.DataInicio}}</td>
 			<td>{{.DataFim}}</td>
-			<td>{{.Status}}</td>
+			{{if .Status}}
+			<td class="bg-success">Aberta</td>
+			{{else}}
+			<td class="bg-danger">Fechada</td>
+			{{end}}
 		</tr>
 	{{end}}
 	</tbody>

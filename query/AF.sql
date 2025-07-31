@@ -5,7 +5,7 @@ INSERT INTO AF (numero, fornecedor, descricao, data_inicio, data_fim, status) VA
 SELECT * FROM AF ORDER BY numero;
 
 -- name: UpdateAF :exec
-UPDATE AF SET numero = ? WHERE numero = ?;
+UPDATE AF SET numero = ?, fornecedor = ?, descricao = ?, data_inicio = ?, data_fim = ?, status = ? WHERE id = ?;
 
 -- name: DeleteAF :exec
-DELETE FROM AF WHERE numero = ?;
+DELETE FROM AF WHERE id = ?;

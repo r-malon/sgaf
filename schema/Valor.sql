@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS Valor (
 	Item_id INTEGER,
 	valor INTEGER NOT NULL,
 	data_inicio DATE NOT NULL,
-	data_fim DATE,
+	data_fim DATE CHECK(data_fim > data_inicio),
 	FOREIGN KEY (Item_id) REFERENCES Item(id)
 );
