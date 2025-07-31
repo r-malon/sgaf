@@ -1,0 +1,26 @@
+{{define "listAFs"}}
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Fornecedor</th>
+			<th scope="col">Descrição</th>
+			<th scope="col">Início</th>
+			<th scope="col">Fim</th>
+			<th scope="col">Status</th>
+		</tr>
+	</thead>
+	<tbody class="table-group-divider">
+	{{range .}}
+		<tr>
+			<th scope="row">{{.Numero}}</th>
+			<td>{{.Fornecedor}}</td>
+			<td>{{.Descricao}}</td>
+			<td>{{.DataInicio}}</td>
+			<td>{{.DataFim}}</td>
+			<td>{{.Status}}</td>
+		</tr>
+	{{end}}
+	</tbody>
+</table>
+{{end}}
