@@ -10,21 +10,23 @@ import (
 )
 
 type AF struct {
-	ID          int64     `json:"id"`
-	Numero      int64     `json:"numero"`
-	Fornecedor  string    `json:"fornecedor"`
-	Descricao   string    `json:"descricao"`
-	DataInicial time.Time `json:"data_inicial"`
-	DataFinal   time.Time `json:"data_final"`
-	Status      bool      `json:"status"`
+	ID         int64     `json:"id"`
+	Numero     int64     `json:"numero"`
+	Fornecedor string    `json:"fornecedor"`
+	Descricao  string    `json:"descricao"`
+	DataInicio time.Time `json:"data_inicio"`
+	DataFim    time.Time `json:"data_fim"`
+	Status     bool      `json:"status"`
 }
 
 type Item struct {
-	ID             int64     `json:"id"`
-	Descricao      string    `json:"descricao"`
-	BandaMaxima    int64     `json:"banda_maxima"`
-	BandaInstalada int64     `json:"banda_instalada"`
-	DataInstalacao time.Time `json:"data_instalacao"`
+	ID             int64         `json:"id"`
+	AfID           sql.NullInt64 `json:"af_id"`
+	LocalID        sql.NullInt64 `json:"local_id"`
+	Descricao      string        `json:"descricao"`
+	BandaMaxima    int64         `json:"banda_maxima"`
+	BandaInstalada int64         `json:"banda_instalada"`
+	DataInstalacao time.Time     `json:"data_instalacao"`
 }
 
 type Local struct {
@@ -40,8 +42,9 @@ type Log struct {
 }
 
 type Valor struct {
-	ID         int64        `json:"id"`
-	Valor      int64        `json:"valor"`
-	DataInicio time.Time    `json:"data_inicio"`
-	DataFim    sql.NullTime `json:"data_fim"`
+	ID         int64         `json:"id"`
+	ItemID     sql.NullInt64 `json:"item_id"`
+	Valor      int64         `json:"valor"`
+	DataInicio time.Time     `json:"data_inicio"`
+	DataFim    sql.NullTime  `json:"data_fim"`
 }

@@ -36,7 +36,7 @@ func (q *Queries) DeleteValor(ctx context.Context, id int64) error {
 }
 
 const listValors = `-- name: ListValors :many
-SELECT id, valor, data_inicio, data_fim FROM Valor
+SELECT id, item_id, valor, data_inicio, data_fim FROM Valor
 `
 
 func (q *Queries) ListValors(ctx context.Context) ([]Valor, error) {
@@ -50,6 +50,7 @@ func (q *Queries) ListValors(ctx context.Context) ([]Valor, error) {
 		var i Valor
 		if err := rows.Scan(
 			&i.ID,
+			&i.ItemID,
 			&i.Valor,
 			&i.DataInicio,
 			&i.DataFim,

@@ -11,16 +11,16 @@ import (
 )
 
 const createAF = `-- name: CreateAF :exec
-INSERT INTO AF (numero, fornecedor, descricao, data_inicial, data_final, status) VALUES (?, ?, ?, ?, ?, ?)
+INSERT INTO AF (numero, fornecedor, descricao, data_inicio, data_fim, status) VALUES (?, ?, ?, ?, ?, ?)
 `
 
 type CreateAFParams struct {
-	Numero      int64     `json:"numero"`
-	Fornecedor  string    `json:"fornecedor"`
-	Descricao   string    `json:"descricao"`
-	DataInicial time.Time `json:"data_inicial"`
-	DataFinal   time.Time `json:"data_final"`
-	Status      bool      `json:"status"`
+	Numero     int64     `json:"numero"`
+	Fornecedor string    `json:"fornecedor"`
+	Descricao  string    `json:"descricao"`
+	DataInicio time.Time `json:"data_inicio"`
+	DataFim    time.Time `json:"data_fim"`
+	Status     bool      `json:"status"`
 }
 
 func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) error {
@@ -28,8 +28,8 @@ func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) error {
 		arg.Numero,
 		arg.Fornecedor,
 		arg.Descricao,
-		arg.DataInicial,
-		arg.DataFinal,
+		arg.DataInicio,
+		arg.DataFim,
 		arg.Status,
 	)
 	return err
@@ -45,7 +45,7 @@ func (q *Queries) DeleteAF(ctx context.Context, numero int64) error {
 }
 
 const listAFs = `-- name: ListAFs :many
-SELECT id, numero, fornecedor, descricao, data_inicial, data_final, status FROM AF ORDER BY numero
+SELECT id, numero, fornecedor, descricao, data_inicio, data_fim, status FROM AF ORDER BY numero
 `
 
 func (q *Queries) ListAFs(ctx context.Context) ([]AF, error) {
@@ -62,8 +62,8 @@ func (q *Queries) ListAFs(ctx context.Context) ([]AF, error) {
 			&i.Numero,
 			&i.Fornecedor,
 			&i.Descricao,
-			&i.DataInicial,
-			&i.DataFinal,
+			&i.DataInicio,
+			&i.DataFim,
 			&i.Status,
 		); err != nil {
 			return nil, err

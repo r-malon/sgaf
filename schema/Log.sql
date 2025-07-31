@@ -3,11 +3,10 @@ CREATE TABLE IF NOT EXISTS Log (
 	valor_antigo INTEGER NOT NULL,
 	valor_novo INTEGER NOT NULL,
 	data_alteracao DATE NOT NULL
-) STRICT;
+);
 
 CREATE TRIGGER Logger
 AFTER INSERT ON Valor
 BEGIN
 	INSERT INTO Log VALUES (OLD.valor, NEW.valor, ?);
 END;
-

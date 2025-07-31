@@ -20,7 +20,7 @@ func (q *Queries) DeleteItem(ctx context.Context, id int64) error {
 }
 
 const listItems = `-- name: ListItems :many
-SELECT id, descricao, banda_maxima, banda_instalada, data_instalacao FROM Item
+SELECT id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_instalacao FROM Item
 `
 
 func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
@@ -34,6 +34,8 @@ func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
 		var i Item
 		if err := rows.Scan(
 			&i.ID,
+			&i.AfID,
+			&i.LocalID,
 			&i.Descricao,
 			&i.BandaMaxima,
 			&i.BandaInstalada,

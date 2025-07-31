@@ -1,10 +1,11 @@
 CREATE TABLE IF NOT EXISTS Item (
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	AF_id INTEGER,
+	Local_id INTEGER,
 	descricao TEXT NOT NULL,
 	banda_maxima INTEGER NOT NULL,
 	banda_instalada INTEGER NOT NULL,
 	data_instalacao DATE NOT NULL,
 	FOREIGN KEY (AF_id) REFERENCES AF(id),
 	FOREIGN KEY (Local_id) REFERENCES Local(id)
-) STRICT;
-
+);
