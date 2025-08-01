@@ -7,8 +7,28 @@ package db
 
 import (
 	"context"
-	"time"
 )
+
+const createItem = `-- name: CreateItem :exec
+INSERT INTO Item (descricao, banda_maxima, banda_instalada, data_instalacao) VALUES (?, ?, ?, ?)
+`
+
+type CreateItemParams struct {
+	Descricao      string `json:"descricao"`
+	BandaMaxima    int64  `json:"banda_maxima"`
+	BandaInstalada int64  `json:"banda_instalada"`
+	DataInstalacao string `json:"data_instalacao"`
+}
+
+func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) error {
+	_, err := q.db.ExecContext(ctx, createItem,
+		arg.Descricao,
+		arg.BandaMaxima,
+		arg.BandaInstalada,
+		arg.DataInstalacao,
+	)
+	return err
+}
 
 const deleteItem = `-- name: DeleteItem :exec
 DELETE FROM Item WHERE id = ?
@@ -59,11 +79,11 @@ UPDATE Item SET descricao = ?, banda_maxima = ?, banda_instalada = ?, data_insta
 `
 
 type UpdateItemParams struct {
-	Descricao      string    `json:"descricao"`
-	BandaMaxima    int64     `json:"banda_maxima"`
-	BandaInstalada int64     `json:"banda_instalada"`
-	DataInstalacao time.Time `json:"data_instalacao"`
-	ID             int64     `json:"id"`
+	Descricao      string `json:"descricao"`
+	BandaMaxima    int64  `json:"banda_maxima"`
+	BandaInstalada int64  `json:"banda_instalada"`
+	DataInstalacao string `json:"data_instalacao"`
+	ID             int64  `json:"id"`
 }
 
 func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) error {

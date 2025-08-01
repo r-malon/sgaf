@@ -26,7 +26,7 @@ type Item struct {
 	Descricao      string        `json:"descricao"`
 	BandaMaxima    int64         `json:"banda_maxima"`
 	BandaInstalada int64         `json:"banda_instalada"`
-	DataInstalacao time.Time     `json:"data_instalacao"`
+	DataInstalacao string        `json:"data_instalacao"`
 }
 
 type Local struct {
@@ -42,9 +42,9 @@ type Log struct {
 }
 
 type Valor struct {
-	ID         int64         `json:"id"`
-	ItemID     sql.NullInt64 `json:"item_id"`
-	Valor      int64         `json:"valor"`
-	DataInicio time.Time     `json:"data_inicio"`
-	DataFim    sql.NullTime  `json:"data_fim"`
+	ID         int64          `json:"id"`
+	ItemID     sql.NullInt64  `json:"item_id"`
+	Valor      int64          `json:"valor"`
+	DataInicio string         `json:"data_inicio"`
+	DataFim    sql.NullString `json:"data_fim"`
 }

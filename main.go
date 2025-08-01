@@ -43,10 +43,15 @@ func main() {
 	http.Handle("PUT /af/{id}", errHandler(updateAF))
 	http.Handle("DELETE /af/{id}", errHandler(deleteAF))
 
-	//	http.Handle("GET /item/{$}", errHandler(listItems))
-	//	http.Handle("POST /item/{$}", errHandler(createItem))
-	//	http.Handle("PUT /item/{id}", errHandler(updateItem))
-	//	http.Handle("DELETE /item/{id}", errHandler(deleteItem))
+	http.Handle("GET /item/{$}", errHandler(listItems))
+	http.Handle("POST /item/{$}", errHandler(createItem))
+	http.Handle("PUT /item/{id}", errHandler(updateItem))
+	http.Handle("DELETE /item/{id}", errHandler(deleteItem))
+
+	http.Handle("GET /valor/{$}", errHandler(listValors))
+	http.Handle("POST /valor/{$}", errHandler(createValor))
+	http.Handle("PUT /valor/{id}", errHandler(updateValor))
+	http.Handle("DELETE /valor/{id}", errHandler(deleteValor))
 
 	log.Fatal(http.ListenAndServe(os.Getenv("ADDR"), nil))
 }

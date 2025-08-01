@@ -8,7 +8,6 @@ package db
 import (
 	"context"
 	"database/sql"
-	"time"
 )
 
 const createValor = `-- name: CreateValor :exec
@@ -16,9 +15,9 @@ INSERT INTO Valor (valor, data_inicio, data_fim) VALUES (?, ?, ?)
 `
 
 type CreateValorParams struct {
-	Valor      int64        `json:"valor"`
-	DataInicio time.Time    `json:"data_inicio"`
-	DataFim    sql.NullTime `json:"data_fim"`
+	Valor      int64          `json:"valor"`
+	DataInicio string         `json:"data_inicio"`
+	DataFim    sql.NullString `json:"data_fim"`
 }
 
 func (q *Queries) CreateValor(ctx context.Context, arg CreateValorParams) error {
@@ -73,10 +72,10 @@ UPDATE Valor SET valor = ?, data_inicio = ?, data_fim = ? WHERE id = ?
 `
 
 type UpdateValorParams struct {
-	Valor      int64        `json:"valor"`
-	DataInicio time.Time    `json:"data_inicio"`
-	DataFim    sql.NullTime `json:"data_fim"`
-	ID         int64        `json:"id"`
+	Valor      int64          `json:"valor"`
+	DataInicio string         `json:"data_inicio"`
+	DataFim    sql.NullString `json:"data_fim"`
+	ID         int64          `json:"id"`
 }
 
 func (q *Queries) UpdateValor(ctx context.Context, arg UpdateValorParams) error {
