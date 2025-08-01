@@ -1,10 +1,11 @@
 //go:build exclude
+
 package main
 
 import (
-	"net/http"
-	"encoding/json"
 	"encoding/csv"
+	"encoding/json"
+	"net/http"
 )
 
 func writeResponse(w http.ResponseWriter, contentType string, data any) {

@@ -10,13 +10,13 @@ import (
 )
 
 type AF struct {
-	ID         int64     `json:"id"`
-	Numero     int64     `json:"numero"`
-	Fornecedor string    `json:"fornecedor"`
-	Descricao  string    `json:"descricao"`
-	DataInicio time.Time `json:"data_inicio"`
-	DataFim    time.Time `json:"data_fim"`
-	Status     bool      `json:"status"`
+	ID         int64  `json:"id"`
+	Numero     int64  `json:"numero"`
+	Fornecedor string `json:"fornecedor"`
+	Descricao  string `json:"descricao"`
+	DataInicio string `json:"data_inicio"`
+	DataFim    string `json:"data_fim"`
+	Status     bool   `json:"status"`
 }
 
 type Item struct {

@@ -18,13 +18,13 @@ func listLocals(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateLocal(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.Atoi(r.PathValue("id"))
-	nome := r.FormValue("nome")
-	data := db.UpdateLocalParams{nome, int64(id)}
-	return q.UpdateLocal(ctx, data)
+	return q.UpdateLocal(ctx, db.UpdateLocalParams{
+		r.FormValue("nome"),
+		first(strconv.ParseInt(r.PathValue("id"), 10, 64)),
+	})
 }
 
 func deleteLocal(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.Atoi(r.PathValue("id"))
-	return q.DeleteLocal(ctx, int64(id))
+	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	return q.DeleteLocal(ctx, id)
 }

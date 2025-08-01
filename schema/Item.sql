@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Item (
 	descricao TEXT NOT NULL,
 	banda_maxima INTEGER NOT NULL,
 	banda_instalada INTEGER NOT NULL,
-	data_instalacao DATE NOT NULL,
+	data_instalacao TEXT NOT NULL,
 	FOREIGN KEY (AF_id) REFERENCES AF(id),
 	FOREIGN KEY (Local_id) REFERENCES Local(id)
 );

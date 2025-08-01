@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"time"
 )
 
 const createAF = `-- name: CreateAF :exec
@@ -15,12 +14,12 @@ INSERT INTO AF (numero, fornecedor, descricao, data_inicio, data_fim, status) VA
 `
 
 type CreateAFParams struct {
-	Numero     int64     `json:"numero"`
-	Fornecedor string    `json:"fornecedor"`
-	Descricao  string    `json:"descricao"`
-	DataInicio time.Time `json:"data_inicio"`
-	DataFim    time.Time `json:"data_fim"`
-	Status     bool      `json:"status"`
+	Numero     int64  `json:"numero"`
+	Fornecedor string `json:"fornecedor"`
+	Descricao  string `json:"descricao"`
+	DataInicio string `json:"data_inicio"`
+	DataFim    string `json:"data_fim"`
+	Status     bool   `json:"status"`
 }
 
 func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) error {
@@ -84,13 +83,13 @@ UPDATE AF SET numero = ?, fornecedor = ?, descricao = ?, data_inicio = ?, data_f
 `
 
 type UpdateAFParams struct {
-	Numero     int64     `json:"numero"`
-	Fornecedor string    `json:"fornecedor"`
-	Descricao  string    `json:"descricao"`
-	DataInicio time.Time `json:"data_inicio"`
-	DataFim    time.Time `json:"data_fim"`
-	Status     bool      `json:"status"`
-	ID         int64     `json:"id"`
+	Numero     int64  `json:"numero"`
+	Fornecedor string `json:"fornecedor"`
+	Descricao  string `json:"descricao"`
+	DataInicio string `json:"data_inicio"`
+	DataFim    string `json:"data_fim"`
+	Status     bool   `json:"status"`
+	ID         int64  `json:"id"`
 }
 
 func (q *Queries) UpdateAF(ctx context.Context, arg UpdateAFParams) error {

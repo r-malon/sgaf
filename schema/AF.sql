@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS AF (
 	numero INTEGER NOT NULL UNIQUE,
 	fornecedor TEXT NOT NULL,
 	descricao TEXT NOT NULL,
-	data_inicio DATE NOT NULL,
-	data_fim DATE NOT NULL CHECK(data_fim > data_inicio),
+	data_inicio TEXT NOT NULL,
+	data_fim TEXT NOT NULL CHECK(data_fim > data_inicio),
 	status BOOLEAN NOT NULL
 );

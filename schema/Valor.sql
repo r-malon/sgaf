@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS Valor (
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	Item_id INTEGER,
 	valor INTEGER NOT NULL,
-	data_inicio DATE NOT NULL,
-	data_fim DATE CHECK(data_fim > data_inicio),
+	data_inicio TEXT NOT NULL,
+	data_fim TEXT CHECK(data_fim > data_inicio),
 	FOREIGN KEY (Item_id) REFERENCES Item(id)
 );

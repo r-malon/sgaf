@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/r-malon/sgaf/db"
@@ -14,10 +15,11 @@ import (
 )
 
 var (
-	tmpl   *template.Template
-	ctx    context.Context
-	dbconn *sql.DB
-	q      *db.Queries
+	tmpl             *template.Template
+	ctx              context.Context
+	dbconn           *sql.DB
+	q                *db.Queries
+	ISO8601DateRegex *regexp.Regexp
 )
 
 type errHandler func(http.ResponseWriter, *http.Request) error
@@ -40,6 +42,11 @@ func main() {
 	http.Handle("POST /af/{$}", errHandler(createAF))
 	http.Handle("PUT /af/{id}", errHandler(updateAF))
 	http.Handle("DELETE /af/{id}", errHandler(deleteAF))
+
+	//	http.Handle("GET /item/{$}", errHandler(listItems))
+	//	http.Handle("POST /item/{$}", errHandler(createItem))
+	//	http.Handle("PUT /item/{id}", errHandler(updateItem))
+	//	http.Handle("DELETE /item/{id}", errHandler(deleteItem))
 
 	log.Fatal(http.ListenAndServe(os.Getenv("ADDR"), nil))
 }
@@ -78,4 +85,5 @@ func init() {
 	q = db.New(dbconn)
 	ctx = context.TODO()
 	tmpl = template.Must(template.ParseGlob("templates/*.html.tmpl"))
+	ISO8601DateRegex = regexp.MustCompile(`\d{4}-([0][1-9]|1[0-2])-([0][1-9]|[1-2]\d|3[01])`)
 }
