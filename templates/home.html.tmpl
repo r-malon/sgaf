@@ -8,11 +8,16 @@
 	<link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
 	<script src="/static/bootstrap.min.js"></script>
 	<script src="/static/htmx.min.js"></script>
+	<script type="module" src="/static/datastar.js"></script>
+	<style>
+		td {padding: 0;}
+		.form-control {border: none transparent;}
+	</style>
 	<title>Sistema de Gestão de Autorizações de Fornecimento</title>
 </head>
 <body>
-	<button class="btn btn-primary" hx-put="/local/{{.Id}}" hx-swap="innerHTML"></div>
-	<div id="" hx-get="/af/" hx-trigger="load" hx-swap="innerHTML"></div>
+	<a href="/local/" hx-boost="true">Locais</a>
+	<div hx-get="/af/" hx-trigger="load" hx-swap="outerHTML"></div>
 </body>
 </html>
 {{end}}

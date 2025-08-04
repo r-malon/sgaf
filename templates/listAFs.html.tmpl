@@ -7,22 +7,20 @@
 			<th scope="col">Descrição</th>
 			<th scope="col">Início</th>
 			<th scope="col">Fim</th>
-			<th scope="col">Status</th>
+			<th scope="col">Aberta?</th>
 		</tr>
 	</thead>
 	<tbody class="table-group-divider">
 	{{range .}}
-		<tr>
-			<th scope="row">{{.Numero}}</th>
-			<td>{{.Fornecedor}}</td>
-			<td>{{.Descricao}}</td>
-			<td>{{.DataInicio}}</td>
-			<td>{{.DataFim}}</td>
-			{{if .Status}}
-			<td class="text-white bg-success">Aberta</td>
-			{{else}}
-			<td class="text-white bg-danger">Fechada</td>
-			{{end}}
+		<tr tabindex="0">
+			<th scope="row"><input class="form-control" value="{{.Numero}}"/></th>
+			<td><input class="form-control" value="{{.Fornecedor}}"/></td>
+			<td><textarea class="form-control">{{.Descricao}}</textarea></td>
+			<td><input class="form-control" type="date" value="{{.DataInicio}}"/></td>
+			<td><input class="form-control" type="date" value="{{.DataFim}}"/></td>
+			<td><input class="form-check-input" type="checkbox" value="{{.Status}}"/></td>
+			<td><input class="form-control form-control-lg" type="submit" value="&#x1F589;" data-on-click="@put('/af/{{.ID}}')"/></td>
+			<td><input class="form-control form-control-lg" type="submit" value="&#x1F5D1;" data-on-click="@delete('/af/{{.ID}}')"/></td>
 		</tr>
 	{{end}}
 	</tbody>
