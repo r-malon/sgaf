@@ -13,4 +13,5 @@ Use BEGIN IMMEDIATE transactions and STRICT tables.
 writeDB.SetMaxOpenConns(1)
 readDB.SetMaxOpenConns(max(4, runtime.NumCPU()))
 ```
-
+python3 -m sqlite_history test.db AF Item Local Valor
+sqlc-1.25 generate
