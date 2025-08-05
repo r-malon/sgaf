@@ -15,3 +15,4 @@ readDB.SetMaxOpenConns(max(4, runtime.NumCPU()))
 ```
 python3 -m sqlite_history test.db AF Item Local Valor
 sqlc-1.25 generate
+go build -ldflags=-s
