@@ -1,4 +1,5 @@
 {{define "listAFs"}}
+<div id="af">
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -12,17 +13,18 @@
 	</thead>
 	<tbody class="table-group-divider">
 	{{range .}}
-		<tr tabindex="0">
-			<th scope="row"><input class="form-control" value="{{.Numero}}"/></th>
-			<td><input class="form-control" value="{{.Fornecedor}}"/></td>
-			<td><textarea class="form-control">{{.Descricao}}</textarea></td>
-			<td><input class="form-control" type="date" value="{{.DataInicio}}"/></td>
-			<td><input class="form-control" type="date" value="{{.DataFim}}"/></td>
-			<td><input class="form-check-input" type="checkbox" value="{{.Status}}"/></td>
-			<td><input class="form-control form-control-lg" type="submit" value="&#x1F589;" data-on-click="@put('/af/{{.ID}}')"/></td>
-			<td><input class="form-control form-control-lg" type="submit" value="&#x1F5D1;" data-on-click="@delete('/af/{{.ID}}')"/></td>
+		<tr>
+			<th scope="row"><form id="form{{.ID}}"></form><input class="form-control" type="number" name="numero" min="0" value="{{.Numero}}" required/></th>
+			<td><input class="form-control" name="fornecedor" value="{{.Fornecedor}}" required/></td>
+			<td><textarea class="form-control" name="descricao" rows="1">{{.Descricao}}</textarea></td>
+			<td><input class="form-control" type="date" name="data_inicio" value="{{slice .DataInicio 0 10}}" required/></td>
+			<td><input class="form-control" type="date" name="data_fim" value="{{slice .DataFim 0 10}}" required/></td>
+			<td><input class="form-check-input" type="checkbox" name="status" value="{{.Status}}" required/></td>
+			<td><input class="form-control fs-3" type="submit" value="&#x1F589;" data-on-click="@put('/af/{{.ID}}', {contentType: 'form', selector: '#form{{.ID}}'})"/></td>
+			<td><input class="form-control fs-3" type="submit" value="&#x1F5D1;" data-on-click="@delete('/af/{{.ID}}', {contentType: 'form', selector: '#form{{.ID}}'})"/></td>
 		</tr>
 	{{end}}
 	</tbody>
 </table>
+</div>
 {{end}}

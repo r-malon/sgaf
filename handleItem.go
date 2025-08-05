@@ -23,7 +23,10 @@ func listItems(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateItem(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		return err
+	}
 	return q.UpdateItem(ctx, db.UpdateItemParams{
 		r.FormValue("descricao"),
 		first(strconv.ParseInt(r.FormValue("banda_maxima"), 10, 64)),
@@ -34,6 +37,9 @@ func updateItem(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteItem(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		return err
+	}
 	return q.DeleteItem(ctx, id)
 }

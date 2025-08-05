@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS AF (
 	fornecedor TEXT NOT NULL,
 	descricao TEXT NOT NULL,
 	data_inicio TEXT NOT NULL,
-	data_fim TEXT NOT NULL CHECK(data_fim > data_inicio),
+	data_fim TEXT NOT NULL,
 	status BOOLEAN NOT NULL
 );

@@ -70,7 +70,7 @@ func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func first[T, U any](v T, d U) T {
 	switch any(d).(type) {
 	case error:
-		log.Printf("%v\n", d)
+		log.Printf("%v	%v\n", v, d)
 	}
 	return v
 }

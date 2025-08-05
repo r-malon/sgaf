@@ -25,7 +25,10 @@ func listAFs(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateAF(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		return err
+	}
 	return q.UpdateAF(ctx, db.UpdateAFParams{
 		first(strconv.ParseInt(r.FormValue("numero"), 10, 64)),
 		r.FormValue("fornecedor"),
@@ -38,6 +41,9 @@ func updateAF(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteAF(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		return err
+	}
 	return q.DeleteAF(ctx, id)
 }

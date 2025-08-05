@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS Valor (
 	Item_id INTEGER,
 	valor INTEGER NOT NULL,
 	data_inicio TEXT NOT NULL,
-	data_fim TEXT CHECK(data_fim > data_inicio),
+	data_fim TEXT,
 	FOREIGN KEY (Item_id) REFERENCES Item(id)
 );
