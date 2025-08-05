@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS Valor (
 	valor INTEGER NOT NULL,
 	data_inicio TEXT NOT NULL,
 	data_fim TEXT,
-	FOREIGN KEY (Item_id) REFERENCES Item(id)
+	FOREIGN KEY (Item_id) REFERENCES Item(id) ON DELETE CASCADE
 );

@@ -13,6 +13,8 @@ func createItem(w http.ResponseWriter, r *http.Request) error {
 		first(strconv.ParseInt(r.FormValue("banda_maxima"), 10, 64)),
 		first(strconv.ParseInt(r.FormValue("banda_instalada"), 10, 64)),
 		ISO8601DateRegex.FindString(r.FormValue("data_instalacao")),
+		first(strconv.ParseInt(r.FormValue("banda_maxima"), 10, 64)),
+		first(strconv.ParseBool(r.FormValue("status"))),
 	})
 }
 
@@ -32,6 +34,8 @@ func updateItem(w http.ResponseWriter, r *http.Request) error {
 		first(strconv.ParseInt(r.FormValue("banda_maxima"), 10, 64)),
 		first(strconv.ParseInt(r.FormValue("banda_instalada"), 10, 64)),
 		ISO8601DateRegex.FindString(r.FormValue("data_instalacao")),
+		first(strconv.ParseInt(r.FormValue("banda_maxima"), 10, 64)),
+		first(strconv.ParseBool(r.FormValue("status"))),
 		id,
 	})
 }

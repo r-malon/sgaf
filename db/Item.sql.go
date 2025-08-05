@@ -10,7 +10,7 @@ import (
 )
 
 const createItem = `-- name: CreateItem :exec
-INSERT INTO Item (descricao, banda_maxima, banda_instalada, data_instalacao) VALUES (?, ?, ?, ?)
+INSERT INTO Item (descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status) VALUES (?, ?, ?, ?, ?, ?)
 `
 
 type CreateItemParams struct {
@@ -18,6 +18,8 @@ type CreateItemParams struct {
 	BandaMaxima    int64  `json:"banda_maxima"`
 	BandaInstalada int64  `json:"banda_instalada"`
 	DataInstalacao string `json:"data_instalacao"`
+	Quantidade     int64  `json:"quantidade"`
+	Status         bool   `json:"status"`
 }
 
 func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) error {
@@ -26,6 +28,8 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) error {
 		arg.BandaMaxima,
 		arg.BandaInstalada,
 		arg.DataInstalacao,
+		arg.Quantidade,
+		arg.Status,
 	)
 	return err
 }
@@ -40,7 +44,7 @@ func (q *Queries) DeleteItem(ctx context.Context, id int64) error {
 }
 
 const listItems = `-- name: ListItems :many
-SELECT id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_instalacao FROM Item
+SELECT id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status FROM Item
 `
 
 func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
@@ -60,6 +64,8 @@ func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
 			&i.BandaMaxima,
 			&i.BandaInstalada,
 			&i.DataInstalacao,
+			&i.Quantidade,
+			&i.Status,
 		); err != nil {
 			return nil, err
 		}
@@ -75,7 +81,7 @@ func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
 }
 
 const updateItem = `-- name: UpdateItem :exec
-UPDATE Item SET descricao = ?, banda_maxima = ?, banda_instalada = ?, data_instalacao = ? WHERE id = ?
+UPDATE Item SET descricao = ?, banda_maxima = ?, banda_instalada = ?, data_instalacao = ?, quantidade = ?, status = ? WHERE id = ?
 `
 
 type UpdateItemParams struct {
@@ -83,6 +89,8 @@ type UpdateItemParams struct {
 	BandaMaxima    int64  `json:"banda_maxima"`
 	BandaInstalada int64  `json:"banda_instalada"`
 	DataInstalacao string `json:"data_instalacao"`
+	Quantidade     int64  `json:"quantidade"`
+	Status         bool   `json:"status"`
 	ID             int64  `json:"id"`
 }
 
@@ -92,6 +100,8 @@ func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) error {
 		arg.BandaMaxima,
 		arg.BandaInstalada,
 		arg.DataInstalacao,
+		arg.Quantidade,
+		arg.Status,
 		arg.ID,
 	)
 	return err

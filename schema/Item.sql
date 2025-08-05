@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS Item (
 	banda_maxima INTEGER NOT NULL,
 	banda_instalada INTEGER NOT NULL,
 	data_instalacao TEXT NOT NULL,
-	FOREIGN KEY (AF_id) REFERENCES AF(id),
+	quantidade INTEGER NOT NULL,
+	status BOOLEAN NOT NULL,
+	FOREIGN KEY (AF_id) REFERENCES AF(id) ON DELETE CASCADE,
 	FOREIGN KEY (Local_id) REFERENCES Local(id)
 );

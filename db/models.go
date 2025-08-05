@@ -27,6 +27,8 @@ type Item struct {
 	BandaMaxima    int64         `json:"banda_maxima"`
 	BandaInstalada int64         `json:"banda_instalada"`
 	DataInstalacao string        `json:"data_instalacao"`
+	Quantidade     int64         `json:"quantidade"`
+	Status         bool          `json:"status"`
 }
 
 type Local struct {

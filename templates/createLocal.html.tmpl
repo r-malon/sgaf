@@ -1,0 +1,25 @@
+{{define "createLocal"}}
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="staticBackdropLabel">Criar Local</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="local_create">
+					<input class="form-control" name="nome" placeholder="Endereço" required/>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+					Fechar
+				</button>
+				<button type="button" class="btn btn-primary" data-on-click="@post('/local/', {contentType: 'form', selector: '#local_create'})">
+					Enviar
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}
