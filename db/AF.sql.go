@@ -43,6 +43,25 @@ func (q *Queries) DeleteAF(ctx context.Context, id int64) error {
 	return err
 }
 
+const getAF = `-- name: GetAF :one
+SELECT id, numero, fornecedor, descricao, data_inicio, data_fim, status FROM AF WHERE id = ?
+`
+
+func (q *Queries) GetAF(ctx context.Context, id int64) (AF, error) {
+	row := q.db.QueryRowContext(ctx, getAF, id)
+	var i AF
+	err := row.Scan(
+		&i.ID,
+		&i.Numero,
+		&i.Fornecedor,
+		&i.Descricao,
+		&i.DataInicio,
+		&i.DataFim,
+		&i.Status,
+	)
+	return i, err
+}
+
 const listAFs = `-- name: ListAFs :many
 SELECT id, numero, fornecedor, descricao, data_inicio, data_fim, status FROM AF ORDER BY numero
 `

@@ -1,3 +1,6 @@
+-- name: GetAF :one
+SELECT * FROM AF WHERE id = ?;
+
 -- name: CreateAF :exec
 INSERT INTO AF (numero, fornecedor, descricao, data_inicio, data_fim, status) VALUES (?, ?, ?, ?, ?, ?);
 
