@@ -27,9 +27,6 @@ type errHandler func(http.ResponseWriter, *http.Request) error
 func main() {
 	defer dbconn.Close()
 
-	l, err := q.ListLocals(ctx)
-	log.Printf("%+v %v\n", l, err)
-
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/{$}", home)
 

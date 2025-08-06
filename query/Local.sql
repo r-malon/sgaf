@@ -1,3 +1,6 @@
+-- name: GetLocal :one
+SELECT * FROM Local WHERE id = ?;
+
 -- name: CreateLocal :exec
 INSERT INTO Local (nome) VALUES (?);
 

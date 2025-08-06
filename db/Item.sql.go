@@ -10,10 +10,12 @@ import (
 )
 
 const createItem = `-- name: CreateItem :exec
-INSERT INTO Item (descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status) VALUES (?, ?, ?, ?, ?, ?)
+INSERT INTO Item (AF_id, Local_id, descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 type CreateItemParams struct {
+	AfID           int64  `json:"af_id"`
+	LocalID        int64  `json:"local_id"`
 	Descricao      string `json:"descricao"`
 	BandaMaxima    int64  `json:"banda_maxima"`
 	BandaInstalada int64  `json:"banda_instalada"`
@@ -24,6 +26,8 @@ type CreateItemParams struct {
 
 func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) error {
 	_, err := q.db.ExecContext(ctx, createItem,
+		arg.AfID,
+		arg.LocalID,
 		arg.Descricao,
 		arg.BandaMaxima,
 		arg.BandaInstalada,
@@ -41,6 +45,27 @@ DELETE FROM Item WHERE id = ?
 func (q *Queries) DeleteItem(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteItem, id)
 	return err
+}
+
+const getItem = `-- name: GetItem :one
+SELECT id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status FROM Item WHERE id = ?
+`
+
+func (q *Queries) GetItem(ctx context.Context, id int64) (Item, error) {
+	row := q.db.QueryRowContext(ctx, getItem, id)
+	var i Item
+	err := row.Scan(
+		&i.ID,
+		&i.AfID,
+		&i.LocalID,
+		&i.Descricao,
+		&i.BandaMaxima,
+		&i.BandaInstalada,
+		&i.DataInstalacao,
+		&i.Quantidade,
+		&i.Status,
+	)
+	return i, err
 }
 
 const listItems = `-- name: ListItems :many
@@ -80,11 +105,134 @@ func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
 	return items, nil
 }
 
+const listItemsByAF = `-- name: ListItemsByAF :many
+SELECT Item.id, af_id, local_id, Item.descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, Item.status, AF.id, numero, fornecedor, AF.descricao, data_inicio, data_fim, AF.status FROM Item
+JOIN AF ON Item.AF_id = AF.id
+WHERE AF_id = ?
+ORDER BY data_instalacao DESC
+`
+
+type ListItemsByAFRow struct {
+	ID             int64  `json:"id"`
+	AfID           int64  `json:"af_id"`
+	LocalID        int64  `json:"local_id"`
+	Descricao      string `json:"descricao"`
+	BandaMaxima    int64  `json:"banda_maxima"`
+	BandaInstalada int64  `json:"banda_instalada"`
+	DataInstalacao string `json:"data_instalacao"`
+	Quantidade     int64  `json:"quantidade"`
+	Status         bool   `json:"status"`
+	ID_2           int64  `json:"id_2"`
+	Numero         int64  `json:"numero"`
+	Fornecedor     string `json:"fornecedor"`
+	Descricao_2    string `json:"descricao_2"`
+	DataInicio     string `json:"data_inicio"`
+	DataFim        string `json:"data_fim"`
+	Status_2       bool   `json:"status_2"`
+}
+
+func (q *Queries) ListItemsByAF(ctx context.Context, afID int64) ([]ListItemsByAFRow, error) {
+	rows, err := q.db.QueryContext(ctx, listItemsByAF, afID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListItemsByAFRow
+	for rows.Next() {
+		var i ListItemsByAFRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.AfID,
+			&i.LocalID,
+			&i.Descricao,
+			&i.BandaMaxima,
+			&i.BandaInstalada,
+			&i.DataInstalacao,
+			&i.Quantidade,
+			&i.Status,
+			&i.ID_2,
+			&i.Numero,
+			&i.Fornecedor,
+			&i.Descricao_2,
+			&i.DataInicio,
+			&i.DataFim,
+			&i.Status_2,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listItemsByLocal = `-- name: ListItemsByLocal :many
+SELECT Item.id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status, Local.id, nome FROM Item
+JOIN Local ON Item.Local_id = Local.id
+WHERE Local_id = ?
+ORDER BY data_instalacao DESC
+`
+
+type ListItemsByLocalRow struct {
+	ID             int64  `json:"id"`
+	AfID           int64  `json:"af_id"`
+	LocalID        int64  `json:"local_id"`
+	Descricao      string `json:"descricao"`
+	BandaMaxima    int64  `json:"banda_maxima"`
+	BandaInstalada int64  `json:"banda_instalada"`
+	DataInstalacao string `json:"data_instalacao"`
+	Quantidade     int64  `json:"quantidade"`
+	Status         bool   `json:"status"`
+	ID_2           int64  `json:"id_2"`
+	Nome           string `json:"nome"`
+}
+
+func (q *Queries) ListItemsByLocal(ctx context.Context, localID int64) ([]ListItemsByLocalRow, error) {
+	rows, err := q.db.QueryContext(ctx, listItemsByLocal, localID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListItemsByLocalRow
+	for rows.Next() {
+		var i ListItemsByLocalRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.AfID,
+			&i.LocalID,
+			&i.Descricao,
+			&i.BandaMaxima,
+			&i.BandaInstalada,
+			&i.DataInstalacao,
+			&i.Quantidade,
+			&i.Status,
+			&i.ID_2,
+			&i.Nome,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateItem = `-- name: UpdateItem :exec
-UPDATE Item SET descricao = ?, banda_maxima = ?, banda_instalada = ?, data_instalacao = ?, quantidade = ?, status = ? WHERE id = ?
+UPDATE Item SET Local_id = ?, descricao = ?, banda_maxima = ?, banda_instalada = ?, data_instalacao = ?, quantidade = ?, status = ? WHERE id = ?
 `
 
 type UpdateItemParams struct {
+	LocalID        int64  `json:"local_id"`
 	Descricao      string `json:"descricao"`
 	BandaMaxima    int64  `json:"banda_maxima"`
 	BandaInstalada int64  `json:"banda_instalada"`
@@ -96,6 +244,7 @@ type UpdateItemParams struct {
 
 func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) error {
 	_, err := q.db.ExecContext(ctx, updateItem,
+		arg.LocalID,
 		arg.Descricao,
 		arg.BandaMaxima,
 		arg.BandaInstalada,

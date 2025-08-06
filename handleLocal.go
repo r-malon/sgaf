@@ -13,8 +13,10 @@ func createLocal(w http.ResponseWriter, r *http.Request) error {
 
 func listLocals(w http.ResponseWriter, r *http.Request) error {
 	l, err := q.ListLocals(ctx)
-	tmpl.ExecuteTemplate(w, "listLocals", l)
-	return err
+	if err != nil {
+		return err
+	}
+	return tmpl.ExecuteTemplate(w, "listLocals", l)
 }
 
 func updateLocal(w http.ResponseWriter, r *http.Request) error {
@@ -25,6 +27,9 @@ func updateLocal(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteLocal(w http.ResponseWriter, r *http.Request) error {
-	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		return err
+	}
 	return q.DeleteLocal(ctx, id)
 }

@@ -11,17 +11,23 @@ import (
 )
 
 const createValor = `-- name: CreateValor :exec
-INSERT INTO Valor (valor, data_inicio, data_fim) VALUES (?, ?, ?)
+INSERT INTO Valor (Item_id, valor, data_inicio, data_fim) VALUES (?, ?, ?, ?)
 `
 
 type CreateValorParams struct {
+	ItemID     int64          `json:"item_id"`
 	Valor      int64          `json:"valor"`
 	DataInicio string         `json:"data_inicio"`
 	DataFim    sql.NullString `json:"data_fim"`
 }
 
 func (q *Queries) CreateValor(ctx context.Context, arg CreateValorParams) error {
-	_, err := q.db.ExecContext(ctx, createValor, arg.Valor, arg.DataInicio, arg.DataFim)
+	_, err := q.db.ExecContext(ctx, createValor,
+		arg.ItemID,
+		arg.Valor,
+		arg.DataInicio,
+		arg.DataFim,
+	)
 	return err
 }
 
@@ -32,6 +38,23 @@ DELETE FROM Valor WHERE id = ?
 func (q *Queries) DeleteValor(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteValor, id)
 	return err
+}
+
+const getValor = `-- name: GetValor :one
+SELECT id, item_id, valor, data_inicio, data_fim FROM Valor WHERE id = ?
+`
+
+func (q *Queries) GetValor(ctx context.Context, id int64) (Valor, error) {
+	row := q.db.QueryRowContext(ctx, getValor, id)
+	var i Valor
+	err := row.Scan(
+		&i.ID,
+		&i.ItemID,
+		&i.Valor,
+		&i.DataInicio,
+		&i.DataFim,
+	)
+	return i, err
 }
 
 const listValors = `-- name: ListValors :many
@@ -67,11 +90,74 @@ func (q *Queries) ListValors(ctx context.Context) ([]Valor, error) {
 	return items, nil
 }
 
+const listValorsByItem = `-- name: ListValorsByItem :many
+SELECT Valor.id, item_id, valor, data_inicio, data_fim, Item.id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_instalacao, quantidade, status FROM Valor
+JOIN Item ON Valor.Item_id = Item.id
+WHERE Item_id = ?
+ORDER BY data_inicio DESC
+`
+
+type ListValorsByItemRow struct {
+	ID             int64          `json:"id"`
+	ItemID         int64          `json:"item_id"`
+	Valor          int64          `json:"valor"`
+	DataInicio     string         `json:"data_inicio"`
+	DataFim        sql.NullString `json:"data_fim"`
+	ID_2           int64          `json:"id_2"`
+	AfID           int64          `json:"af_id"`
+	LocalID        int64          `json:"local_id"`
+	Descricao      string         `json:"descricao"`
+	BandaMaxima    int64          `json:"banda_maxima"`
+	BandaInstalada int64          `json:"banda_instalada"`
+	DataInstalacao string         `json:"data_instalacao"`
+	Quantidade     int64          `json:"quantidade"`
+	Status         bool           `json:"status"`
+}
+
+func (q *Queries) ListValorsByItem(ctx context.Context, itemID int64) ([]ListValorsByItemRow, error) {
+	rows, err := q.db.QueryContext(ctx, listValorsByItem, itemID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListValorsByItemRow
+	for rows.Next() {
+		var i ListValorsByItemRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.ItemID,
+			&i.Valor,
+			&i.DataInicio,
+			&i.DataFim,
+			&i.ID_2,
+			&i.AfID,
+			&i.LocalID,
+			&i.Descricao,
+			&i.BandaMaxima,
+			&i.BandaInstalada,
+			&i.DataInstalacao,
+			&i.Quantidade,
+			&i.Status,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateValor = `-- name: UpdateValor :exec
-UPDATE Valor SET valor = ?, data_inicio = ?, data_fim = ? WHERE id = ?
+UPDATE Valor SET Item_id = ?, valor = ?, data_inicio = ?, data_fim = ? WHERE id = ?
 `
 
 type UpdateValorParams struct {
+	ItemID     int64          `json:"item_id"`
 	Valor      int64          `json:"valor"`
 	DataInicio string         `json:"data_inicio"`
 	DataFim    sql.NullString `json:"data_fim"`
@@ -80,6 +166,7 @@ type UpdateValorParams struct {
 
 func (q *Queries) UpdateValor(ctx context.Context, arg UpdateValorParams) error {
 	_, err := q.db.ExecContext(ctx, updateValor,
+		arg.ItemID,
 		arg.Valor,
 		arg.DataInicio,
 		arg.DataFim,

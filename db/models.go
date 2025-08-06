@@ -6,7 +6,6 @@ package db
 
 import (
 	"database/sql"
-	"time"
 )
 
 type AF struct {
@@ -20,15 +19,15 @@ type AF struct {
 }
 
 type Item struct {
-	ID             int64         `json:"id"`
-	AfID           sql.NullInt64 `json:"af_id"`
-	LocalID        sql.NullInt64 `json:"local_id"`
-	Descricao      string        `json:"descricao"`
-	BandaMaxima    int64         `json:"banda_maxima"`
-	BandaInstalada int64         `json:"banda_instalada"`
-	DataInstalacao string        `json:"data_instalacao"`
-	Quantidade     int64         `json:"quantidade"`
-	Status         bool          `json:"status"`
+	ID             int64  `json:"id"`
+	AfID           int64  `json:"af_id"`
+	LocalID        int64  `json:"local_id"`
+	Descricao      string `json:"descricao"`
+	BandaMaxima    int64  `json:"banda_maxima"`
+	BandaInstalada int64  `json:"banda_instalada"`
+	DataInstalacao string `json:"data_instalacao"`
+	Quantidade     int64  `json:"quantidade"`
+	Status         bool   `json:"status"`
 }
 
 type Local struct {
@@ -36,16 +35,9 @@ type Local struct {
 	Nome string `json:"nome"`
 }
 
-type Log struct {
-	ID            int64     `json:"id"`
-	ValorAntigo   int64     `json:"valor_antigo"`
-	ValorNovo     int64     `json:"valor_novo"`
-	DataAlteracao time.Time `json:"data_alteracao"`
-}
-
 type Valor struct {
 	ID         int64          `json:"id"`
-	ItemID     sql.NullInt64  `json:"item_id"`
+	ItemID     int64          `json:"item_id"`
 	Valor      int64          `json:"valor"`
 	DataInicio string         `json:"data_inicio"`
 	DataFim    sql.NullString `json:"data_fim"`

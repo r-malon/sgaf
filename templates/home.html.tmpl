@@ -10,20 +10,33 @@
 	<script src="/static/htmx.min.js"></script>
 	<script type="module" src="/static/datastar.js"></script>
 	<style>
-		th, td {padding: 0;}
 		th .form-control, td .form-control {border: none transparent;}
 	</style>
 	<title>Sistema de Gestão de Autorizações de Fornecimento</title>
 </head>
 <body>
-	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-		Criar AF
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAF">
+		&#x271A;AF
+	</button>
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createItem">
+		&#x271A;Item
+	</button>
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createValor">
+		&#x271A;Valor
+	</button>
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLocal">
+		&#x271A;Local
 	</button>
 
 	{{template "createAF"}}
+	{{template "createItem"}}
+	{{template "createValor"}}
+	{{template "createLocal"}}
 
 	<a href="/local/" hx-boost="true">Locais</a>
-	<div id="af" data-on-load="@get('/af/')"></div>
+	<div id="af" data-on-load="@get('/af/')">
+		Carregando...
+	</div>
 </body>
 </html>
 {{end}}

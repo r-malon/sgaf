@@ -27,6 +27,17 @@ func (q *Queries) DeleteLocal(ctx context.Context, id int64) error {
 	return err
 }
 
+const getLocal = `-- name: GetLocal :one
+SELECT id, nome FROM Local WHERE id = ?
+`
+
+func (q *Queries) GetLocal(ctx context.Context, id int64) (Local, error) {
+	row := q.db.QueryRowContext(ctx, getLocal, id)
+	var i Local
+	err := row.Scan(&i.ID, &i.Nome)
+	return i, err
+}
+
 const listLocals = `-- name: ListLocals :many
 SELECT id, nome FROM Local
 `

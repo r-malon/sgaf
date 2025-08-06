@@ -1,7 +1,7 @@
 {{define "listLocals"}}
-<ul class="list-group">
+<select class="form-select">
 	{{range .}}
-	<li class="list-group-item">{{.Nome}}</li>
+	<option value="{{.Nome}}">{{.Nome}}</option>
 	{{end}}
-</ul>
+</select>
 {{end}}
