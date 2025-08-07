@@ -25,7 +25,7 @@ type CreateItemParams struct {
 }
 
 func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) error {
-	_, err := q.db.ExecContext(ctx, createItem,
+	_, err := q.exec(ctx, q.createItemStmt, createItem,
 		arg.AfID,
 		arg.LocalID,
 		arg.Descricao,
@@ -43,7 +43,7 @@ DELETE FROM Item WHERE id = ?
 `
 
 func (q *Queries) DeleteItem(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteItem, id)
+	_, err := q.exec(ctx, q.deleteItemStmt, deleteItem, id)
 	return err
 }
 
@@ -52,7 +52,7 @@ SELECT id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_insta
 `
 
 func (q *Queries) GetItem(ctx context.Context, id int64) (Item, error) {
-	row := q.db.QueryRowContext(ctx, getItem, id)
+	row := q.queryRow(ctx, q.getItemStmt, getItem, id)
 	var i Item
 	err := row.Scan(
 		&i.ID,
@@ -73,7 +73,7 @@ SELECT id, af_id, local_id, descricao, banda_maxima, banda_instalada, data_insta
 `
 
 func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
-	rows, err := q.db.QueryContext(ctx, listItems)
+	rows, err := q.query(ctx, q.listItemsStmt, listItems)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ type ListItemsByAFRow struct {
 }
 
 func (q *Queries) ListItemsByAF(ctx context.Context, afID int64) ([]ListItemsByAFRow, error) {
-	rows, err := q.db.QueryContext(ctx, listItemsByAF, afID)
+	rows, err := q.query(ctx, q.listItemsByAFStmt, listItemsByAF, afID)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +193,7 @@ type ListItemsByLocalRow struct {
 }
 
 func (q *Queries) ListItemsByLocal(ctx context.Context, localID int64) ([]ListItemsByLocalRow, error) {
-	rows, err := q.db.QueryContext(ctx, listItemsByLocal, localID)
+	rows, err := q.query(ctx, q.listItemsByLocalStmt, listItemsByLocal, localID)
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +243,7 @@ type UpdateItemParams struct {
 }
 
 func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) error {
-	_, err := q.db.ExecContext(ctx, updateItem,
+	_, err := q.exec(ctx, q.updateItemStmt, updateItem,
 		arg.LocalID,
 		arg.Descricao,
 		arg.BandaMaxima,

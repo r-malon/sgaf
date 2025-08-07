@@ -7,6 +7,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"fmt"
 )
 
 type DBTX interface {
@@ -20,12 +21,288 @@ func New(db DBTX) *Queries {
 	return &Queries{db: db}
 }
 
+func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
+	q := Queries{db: db}
+	var err error
+	if q.createAFStmt, err = db.PrepareContext(ctx, createAF); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateAF: %w", err)
+	}
+	if q.createItemStmt, err = db.PrepareContext(ctx, createItem); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateItem: %w", err)
+	}
+	if q.createLocalStmt, err = db.PrepareContext(ctx, createLocal); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateLocal: %w", err)
+	}
+	if q.createValorStmt, err = db.PrepareContext(ctx, createValor); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateValor: %w", err)
+	}
+	if q.deleteAFStmt, err = db.PrepareContext(ctx, deleteAF); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteAF: %w", err)
+	}
+	if q.deleteItemStmt, err = db.PrepareContext(ctx, deleteItem); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteItem: %w", err)
+	}
+	if q.deleteLocalStmt, err = db.PrepareContext(ctx, deleteLocal); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteLocal: %w", err)
+	}
+	if q.deleteValorStmt, err = db.PrepareContext(ctx, deleteValor); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteValor: %w", err)
+	}
+	if q.getAFStmt, err = db.PrepareContext(ctx, getAF); err != nil {
+		return nil, fmt.Errorf("error preparing query GetAF: %w", err)
+	}
+	if q.getItemStmt, err = db.PrepareContext(ctx, getItem); err != nil {
+		return nil, fmt.Errorf("error preparing query GetItem: %w", err)
+	}
+	if q.getLocalStmt, err = db.PrepareContext(ctx, getLocal); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLocal: %w", err)
+	}
+	if q.getValorStmt, err = db.PrepareContext(ctx, getValor); err != nil {
+		return nil, fmt.Errorf("error preparing query GetValor: %w", err)
+	}
+	if q.listAFsStmt, err = db.PrepareContext(ctx, listAFs); err != nil {
+		return nil, fmt.Errorf("error preparing query ListAFs: %w", err)
+	}
+	if q.listItemsStmt, err = db.PrepareContext(ctx, listItems); err != nil {
+		return nil, fmt.Errorf("error preparing query ListItems: %w", err)
+	}
+	if q.listItemsByAFStmt, err = db.PrepareContext(ctx, listItemsByAF); err != nil {
+		return nil, fmt.Errorf("error preparing query ListItemsByAF: %w", err)
+	}
+	if q.listItemsByLocalStmt, err = db.PrepareContext(ctx, listItemsByLocal); err != nil {
+		return nil, fmt.Errorf("error preparing query ListItemsByLocal: %w", err)
+	}
+	if q.listLocalsStmt, err = db.PrepareContext(ctx, listLocals); err != nil {
+		return nil, fmt.Errorf("error preparing query ListLocals: %w", err)
+	}
+	if q.listValorsStmt, err = db.PrepareContext(ctx, listValors); err != nil {
+		return nil, fmt.Errorf("error preparing query ListValors: %w", err)
+	}
+	if q.listValorsByItemStmt, err = db.PrepareContext(ctx, listValorsByItem); err != nil {
+		return nil, fmt.Errorf("error preparing query ListValorsByItem: %w", err)
+	}
+	if q.updateAFStmt, err = db.PrepareContext(ctx, updateAF); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateAF: %w", err)
+	}
+	if q.updateItemStmt, err = db.PrepareContext(ctx, updateItem); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateItem: %w", err)
+	}
+	if q.updateLocalStmt, err = db.PrepareContext(ctx, updateLocal); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateLocal: %w", err)
+	}
+	if q.updateValorStmt, err = db.PrepareContext(ctx, updateValor); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateValor: %w", err)
+	}
+	return &q, nil
+}
+
+func (q *Queries) Close() error {
+	var err error
+	if q.createAFStmt != nil {
+		if cerr := q.createAFStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createAFStmt: %w", cerr)
+		}
+	}
+	if q.createItemStmt != nil {
+		if cerr := q.createItemStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createItemStmt: %w", cerr)
+		}
+	}
+	if q.createLocalStmt != nil {
+		if cerr := q.createLocalStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createLocalStmt: %w", cerr)
+		}
+	}
+	if q.createValorStmt != nil {
+		if cerr := q.createValorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createValorStmt: %w", cerr)
+		}
+	}
+	if q.deleteAFStmt != nil {
+		if cerr := q.deleteAFStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteAFStmt: %w", cerr)
+		}
+	}
+	if q.deleteItemStmt != nil {
+		if cerr := q.deleteItemStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteItemStmt: %w", cerr)
+		}
+	}
+	if q.deleteLocalStmt != nil {
+		if cerr := q.deleteLocalStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteLocalStmt: %w", cerr)
+		}
+	}
+	if q.deleteValorStmt != nil {
+		if cerr := q.deleteValorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteValorStmt: %w", cerr)
+		}
+	}
+	if q.getAFStmt != nil {
+		if cerr := q.getAFStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getAFStmt: %w", cerr)
+		}
+	}
+	if q.getItemStmt != nil {
+		if cerr := q.getItemStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getItemStmt: %w", cerr)
+		}
+	}
+	if q.getLocalStmt != nil {
+		if cerr := q.getLocalStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLocalStmt: %w", cerr)
+		}
+	}
+	if q.getValorStmt != nil {
+		if cerr := q.getValorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getValorStmt: %w", cerr)
+		}
+	}
+	if q.listAFsStmt != nil {
+		if cerr := q.listAFsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listAFsStmt: %w", cerr)
+		}
+	}
+	if q.listItemsStmt != nil {
+		if cerr := q.listItemsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listItemsStmt: %w", cerr)
+		}
+	}
+	if q.listItemsByAFStmt != nil {
+		if cerr := q.listItemsByAFStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listItemsByAFStmt: %w", cerr)
+		}
+	}
+	if q.listItemsByLocalStmt != nil {
+		if cerr := q.listItemsByLocalStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listItemsByLocalStmt: %w", cerr)
+		}
+	}
+	if q.listLocalsStmt != nil {
+		if cerr := q.listLocalsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listLocalsStmt: %w", cerr)
+		}
+	}
+	if q.listValorsStmt != nil {
+		if cerr := q.listValorsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listValorsStmt: %w", cerr)
+		}
+	}
+	if q.listValorsByItemStmt != nil {
+		if cerr := q.listValorsByItemStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listValorsByItemStmt: %w", cerr)
+		}
+	}
+	if q.updateAFStmt != nil {
+		if cerr := q.updateAFStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateAFStmt: %w", cerr)
+		}
+	}
+	if q.updateItemStmt != nil {
+		if cerr := q.updateItemStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateItemStmt: %w", cerr)
+		}
+	}
+	if q.updateLocalStmt != nil {
+		if cerr := q.updateLocalStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateLocalStmt: %w", cerr)
+		}
+	}
+	if q.updateValorStmt != nil {
+		if cerr := q.updateValorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateValorStmt: %w", cerr)
+		}
+	}
+	return err
+}
+
+func (q *Queries) exec(ctx context.Context, stmt *sql.Stmt, query string, args ...interface{}) (sql.Result, error) {
+	switch {
+	case stmt != nil && q.tx != nil:
+		return q.tx.StmtContext(ctx, stmt).ExecContext(ctx, args...)
+	case stmt != nil:
+		return stmt.ExecContext(ctx, args...)
+	default:
+		return q.db.ExecContext(ctx, query, args...)
+	}
+}
+
+func (q *Queries) query(ctx context.Context, stmt *sql.Stmt, query string, args ...interface{}) (*sql.Rows, error) {
+	switch {
+	case stmt != nil && q.tx != nil:
+		return q.tx.StmtContext(ctx, stmt).QueryContext(ctx, args...)
+	case stmt != nil:
+		return stmt.QueryContext(ctx, args...)
+	default:
+		return q.db.QueryContext(ctx, query, args...)
+	}
+}
+
+func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, args ...interface{}) *sql.Row {
+	switch {
+	case stmt != nil && q.tx != nil:
+		return q.tx.StmtContext(ctx, stmt).QueryRowContext(ctx, args...)
+	case stmt != nil:
+		return stmt.QueryRowContext(ctx, args...)
+	default:
+		return q.db.QueryRowContext(ctx, query, args...)
+	}
+}
+
 type Queries struct {
-	db DBTX
+	db                   DBTX
+	tx                   *sql.Tx
+	createAFStmt         *sql.Stmt
+	createItemStmt       *sql.Stmt
+	createLocalStmt      *sql.Stmt
+	createValorStmt      *sql.Stmt
+	deleteAFStmt         *sql.Stmt
+	deleteItemStmt       *sql.Stmt
+	deleteLocalStmt      *sql.Stmt
+	deleteValorStmt      *sql.Stmt
+	getAFStmt            *sql.Stmt
+	getItemStmt          *sql.Stmt
+	getLocalStmt         *sql.Stmt
+	getValorStmt         *sql.Stmt
+	listAFsStmt          *sql.Stmt
+	listItemsStmt        *sql.Stmt
+	listItemsByAFStmt    *sql.Stmt
+	listItemsByLocalStmt *sql.Stmt
+	listLocalsStmt       *sql.Stmt
+	listValorsStmt       *sql.Stmt
+	listValorsByItemStmt *sql.Stmt
+	updateAFStmt         *sql.Stmt
+	updateItemStmt       *sql.Stmt
+	updateLocalStmt      *sql.Stmt
+	updateValorStmt      *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db: tx,
+		db:                   tx,
+		tx:                   tx,
+		createAFStmt:         q.createAFStmt,
+		createItemStmt:       q.createItemStmt,
+		createLocalStmt:      q.createLocalStmt,
+		createValorStmt:      q.createValorStmt,
+		deleteAFStmt:         q.deleteAFStmt,
+		deleteItemStmt:       q.deleteItemStmt,
+		deleteLocalStmt:      q.deleteLocalStmt,
+		deleteValorStmt:      q.deleteValorStmt,
+		getAFStmt:            q.getAFStmt,
+		getItemStmt:          q.getItemStmt,
+		getLocalStmt:         q.getLocalStmt,
+		getValorStmt:         q.getValorStmt,
+		listAFsStmt:          q.listAFsStmt,
+		listItemsStmt:        q.listItemsStmt,
+		listItemsByAFStmt:    q.listItemsByAFStmt,
+		listItemsByLocalStmt: q.listItemsByLocalStmt,
+		listLocalsStmt:       q.listLocalsStmt,
+		listValorsStmt:       q.listValorsStmt,
+		listValorsByItemStmt: q.listValorsByItemStmt,
+		updateAFStmt:         q.updateAFStmt,
+		updateItemStmt:       q.updateItemStmt,
+		updateLocalStmt:      q.updateLocalStmt,
+		updateValorStmt:      q.updateValorStmt,
 	}
 }

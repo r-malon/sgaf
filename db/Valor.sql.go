@@ -22,7 +22,7 @@ type CreateValorParams struct {
 }
 
 func (q *Queries) CreateValor(ctx context.Context, arg CreateValorParams) error {
-	_, err := q.db.ExecContext(ctx, createValor,
+	_, err := q.exec(ctx, q.createValorStmt, createValor,
 		arg.ItemID,
 		arg.Valor,
 		arg.DataInicio,
@@ -36,7 +36,7 @@ DELETE FROM Valor WHERE id = ?
 `
 
 func (q *Queries) DeleteValor(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteValor, id)
+	_, err := q.exec(ctx, q.deleteValorStmt, deleteValor, id)
 	return err
 }
 
@@ -45,7 +45,7 @@ SELECT id, item_id, valor, data_inicio, data_fim FROM Valor WHERE id = ?
 `
 
 func (q *Queries) GetValor(ctx context.Context, id int64) (Valor, error) {
-	row := q.db.QueryRowContext(ctx, getValor, id)
+	row := q.queryRow(ctx, q.getValorStmt, getValor, id)
 	var i Valor
 	err := row.Scan(
 		&i.ID,
@@ -62,7 +62,7 @@ SELECT id, item_id, valor, data_inicio, data_fim FROM Valor
 `
 
 func (q *Queries) ListValors(ctx context.Context) ([]Valor, error) {
-	rows, err := q.db.QueryContext(ctx, listValors)
+	rows, err := q.query(ctx, q.listValorsStmt, listValors)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ type ListValorsByItemRow struct {
 }
 
 func (q *Queries) ListValorsByItem(ctx context.Context, itemID int64) ([]ListValorsByItemRow, error) {
-	rows, err := q.db.QueryContext(ctx, listValorsByItem, itemID)
+	rows, err := q.query(ctx, q.listValorsByItemStmt, listValorsByItem, itemID)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ type UpdateValorParams struct {
 }
 
 func (q *Queries) UpdateValor(ctx context.Context, arg UpdateValorParams) error {
-	_, err := q.db.ExecContext(ctx, updateValor,
+	_, err := q.exec(ctx, q.updateValorStmt, updateValor,
 		arg.ItemID,
 		arg.Valor,
 		arg.DataInicio,

@@ -14,7 +14,7 @@ INSERT INTO Local (nome) VALUES (?)
 `
 
 func (q *Queries) CreateLocal(ctx context.Context, nome string) error {
-	_, err := q.db.ExecContext(ctx, createLocal, nome)
+	_, err := q.exec(ctx, q.createLocalStmt, createLocal, nome)
 	return err
 }
 
@@ -23,7 +23,7 @@ DELETE FROM Local WHERE id = ?
 `
 
 func (q *Queries) DeleteLocal(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteLocal, id)
+	_, err := q.exec(ctx, q.deleteLocalStmt, deleteLocal, id)
 	return err
 }
 
@@ -32,7 +32,7 @@ SELECT id, nome FROM Local WHERE id = ?
 `
 
 func (q *Queries) GetLocal(ctx context.Context, id int64) (Local, error) {
-	row := q.db.QueryRowContext(ctx, getLocal, id)
+	row := q.queryRow(ctx, q.getLocalStmt, getLocal, id)
 	var i Local
 	err := row.Scan(&i.ID, &i.Nome)
 	return i, err
@@ -43,7 +43,7 @@ SELECT id, nome FROM Local
 `
 
 func (q *Queries) ListLocals(ctx context.Context) ([]Local, error) {
-	rows, err := q.db.QueryContext(ctx, listLocals)
+	rows, err := q.query(ctx, q.listLocalsStmt, listLocals)
 	if err != nil {
 		return nil, err
 	}
@@ -75,6 +75,6 @@ type UpdateLocalParams struct {
 }
 
 func (q *Queries) UpdateLocal(ctx context.Context, arg UpdateLocalParams) error {
-	_, err := q.db.ExecContext(ctx, updateLocal, arg.Nome, arg.ID)
+	_, err := q.exec(ctx, q.updateLocalStmt, updateLocal, arg.Nome, arg.ID)
 	return err
 }

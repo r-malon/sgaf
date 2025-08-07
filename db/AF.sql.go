@@ -23,7 +23,7 @@ type CreateAFParams struct {
 }
 
 func (q *Queries) CreateAF(ctx context.Context, arg CreateAFParams) error {
-	_, err := q.db.ExecContext(ctx, createAF,
+	_, err := q.exec(ctx, q.createAFStmt, createAF,
 		arg.Numero,
 		arg.Fornecedor,
 		arg.Descricao,
@@ -39,7 +39,7 @@ DELETE FROM AF WHERE id = ?
 `
 
 func (q *Queries) DeleteAF(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteAF, id)
+	_, err := q.exec(ctx, q.deleteAFStmt, deleteAF, id)
 	return err
 }
 
@@ -48,7 +48,7 @@ SELECT id, numero, fornecedor, descricao, data_inicio, data_fim, status FROM AF 
 `
 
 func (q *Queries) GetAF(ctx context.Context, id int64) (AF, error) {
-	row := q.db.QueryRowContext(ctx, getAF, id)
+	row := q.queryRow(ctx, q.getAFStmt, getAF, id)
 	var i AF
 	err := row.Scan(
 		&i.ID,
@@ -67,7 +67,7 @@ SELECT id, numero, fornecedor, descricao, data_inicio, data_fim, status FROM AF 
 `
 
 func (q *Queries) ListAFs(ctx context.Context) ([]AF, error) {
-	rows, err := q.db.QueryContext(ctx, listAFs)
+	rows, err := q.query(ctx, q.listAFsStmt, listAFs)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ type UpdateAFParams struct {
 }
 
 func (q *Queries) UpdateAF(ctx context.Context, arg UpdateAFParams) error {
-	_, err := q.db.ExecContext(ctx, updateAF,
+	_, err := q.exec(ctx, q.updateAFStmt, updateAF,
 		arg.Numero,
 		arg.Fornecedor,
 		arg.Descricao,
