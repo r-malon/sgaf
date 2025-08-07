@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"embed"
 	"html/template"
 	"log"
 	"net/http"
@@ -15,6 +16,11 @@ import (
 )
 
 var (
+	//go:embed static/*
+	staticFS embed.FS
+	//go:embed templates/*
+	tmplFS embed.FS
+
 	tmpl             *template.Template
 	ctx              context.Context
 	dbconn           *sql.DB
@@ -27,7 +33,7 @@ type errHandler func(http.ResponseWriter, *http.Request) error
 func main() {
 	defer dbconn.Close()
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServerFS(staticFS)))
 	http.HandleFunc("/{$}", home)
 
 	http.Handle("GET /local/{$}", errHandler(listLocals))
@@ -86,6 +92,6 @@ func init() {
 
 	q = db.New(dbconn)
 	ctx = context.TODO()
-	tmpl = template.Must(template.ParseGlob("templates/*.html.tmpl"))
+	tmpl = template.Must(template.ParseFS(tmplFS, "templates/*.html.tmpl"))
 	ISO8601DateRegex = regexp.MustCompile(`\d{4}-([0][1-9]|1[0-2])-([0][1-9]|[1-2]\d|3[01])`)
 }
