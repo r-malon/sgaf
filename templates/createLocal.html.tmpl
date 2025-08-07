@@ -1,5 +1,5 @@
 {{define "createLocal"}}
-<div class="modal fade" id="createLocal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createLocalLabel" aria-hidden="true">
+<div class="modal fade" id="createLocal" tabindex="-1" aria-labelledby="createLocalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -12,9 +12,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-					Fechar
-				</button>
+				<input type="reset" class="btn btn-warning" form="local_create" value="Limpar"/>
 				<button type="button" class="btn btn-primary" data-on-click="@post('/local/', {contentType: 'form', selector: '#local_create'})">
 					Enviar
 				</button>

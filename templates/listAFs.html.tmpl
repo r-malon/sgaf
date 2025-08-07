@@ -17,13 +17,13 @@
 		<tr>
 			<th class="py-0" scope="row">
 				<form id="form{{.ID}}"></form>
-				<input class="form-control" type="number" name="numero" min="0" value="{{.Numero}}" form="form{{.ID}}" required/>
+				<input class="form-control" type="number" name="numero" min="1" value="{{.Numero}}" form="form{{.ID}}" required/>
 			</th>
 			<td class="py-0"><input class="form-control" name="fornecedor" value="{{.Fornecedor}}" form="form{{.ID}}" required/></td>
 			<td class="py-0"><textarea class="form-control" name="descricao" rows="1" form="form{{.ID}}" required>{{.Descricao}}</textarea></td>
 			<td class="py-0"><input class="form-control" type="date" name="data_inicio" value="{{slice .DataInicio 0 10}}" form="form{{.ID}}" required/></td>
 			<td class="py-0"><input class="form-control" type="date" name="data_fim" value="{{slice .DataFim 0 10}}" form="form{{.ID}}" required/></td>
-			<td class="py-0"><input class="form-check-input" type="checkbox" name="status" form="form{{.ID}}" {{if .Status}}checked{{end}}/></td>
+			<td class="py-0"><input class="form-check-input align-bottom" type="checkbox" name="status" form="form{{.ID}}" value="1" {{if .Status}}checked{{end}}/></td>
 			<td class="py-0">
 				<input class="btn py-0 fs-4" type="submit" value="&#x1F589;" data-on-click="@put('/af/{{.ID}}', {contentType: 'form', selector: '#form{{.ID}}'})"/>
 				<input class="btn py-0 fs-4" type="submit" value="&#x1F5D1;" data-indicator-fetching data-attr-disabled="$fetching" data-on-click="confirm('Remover AF?') && @delete('/af/{{.ID}}', {contentType: 'form', selector: '#form{{.ID}}'})"/>

@@ -8,6 +8,9 @@ import (
 )
 
 func createLocal(w http.ResponseWriter, r *http.Request) error {
+	if r.FormValue("nome") == "" {
+		return nil
+	}
 	return q.CreateLocal(ctx, r.FormValue("nome"))
 }
 
@@ -20,6 +23,9 @@ func listLocals(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateLocal(w http.ResponseWriter, r *http.Request) error {
+	if r.FormValue("nome") == "" {
+		return nil
+	}
 	return q.UpdateLocal(ctx, db.UpdateLocalParams{
 		r.FormValue("nome"),
 		first(strconv.ParseInt(r.PathValue("id"), 10, 64)),

@@ -14,7 +14,12 @@ func createAF(w http.ResponseWriter, r *http.Request) error {
 	descricao := r.FormValue("descricao")
 	dataInicio := ISO8601DateRegex.FindString(r.FormValue("data_inicio"))
 	dataFim := ISO8601DateRegex.FindString(r.FormValue("data_fim"))
-	status, _ := strconv.ParseBool(r.FormValue("status"))
+	var status bool
+	if r.FormValue("status") == "" {
+		status = false
+	} else {
+		status, _ = strconv.ParseBool(r.FormValue("status"))
+	}
 
 	if errors := validateAF(numero, fornecedor, descricao, dataInicio, dataFim, status); len(errors) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -58,7 +63,13 @@ func updateAF(w http.ResponseWriter, r *http.Request) error {
 	descricao := r.FormValue("descricao")
 	dataInicio := ISO8601DateRegex.FindString(r.FormValue("data_inicio"))
 	dataFim := ISO8601DateRegex.FindString(r.FormValue("data_fim"))
-	status, _ := strconv.ParseBool(r.FormValue("status"))
+
+	var status bool
+	if r.FormValue("status") == "" {
+		status = false
+	} else {
+		status, _ = strconv.ParseBool(r.FormValue("status"))
+	}
 
 	if errors := validateAF(numero, fornecedor, descricao, dataInicio, dataFim, status); len(errors) > 0 {
 		w.Header().Set("Content-Type", "application/json")

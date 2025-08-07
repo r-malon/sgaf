@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS AF (
 	data_inicio TEXT NOT NULL,
 	data_fim TEXT NOT NULL,
 	status BOOLEAN NOT NULL
-) STRICT;
+);

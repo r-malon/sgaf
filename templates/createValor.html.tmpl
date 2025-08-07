@@ -1,5 +1,5 @@
 {{define "createValor"}}
-<div class="modal fade" id="createValor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createValorLabel" aria-hidden="true">
+<div class="modal fade" id="createValor" tabindex="-1" aria-labelledby="createValorLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -20,9 +20,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-					Fechar
-				</button>
+				<input type="reset" class="btn btn-warning" form="valor_create" value="Limpar"/>
 				<button type="button" class="btn btn-primary" data-on-click="@post('/valor/', {contentType: 'form', selector: '#valor_create'})">
 					Enviar
 				</button>

@@ -16,7 +16,13 @@ func createItem(w http.ResponseWriter, r *http.Request) error {
 	afID := first(strconv.ParseInt(r.FormValue("af_id"), 10, 64))
 	localID := first(strconv.ParseInt(r.FormValue("local_id"), 10, 64))
 	quantidade := first(strconv.ParseInt(r.FormValue("quantidade"), 10, 64))
-	status := first(strconv.ParseBool(r.FormValue("status")))
+
+	var status bool
+	if r.FormValue("status") == "" {
+		status = false
+	} else {
+		status, _ = strconv.ParseBool(r.FormValue("status"))
+	}
 
 	if errors := validateItem(descricao, bandaMaxima, bandaInstalada, dataInstalacao, quantidade, status); len(errors) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -81,7 +87,13 @@ func updateItem(w http.ResponseWriter, r *http.Request) error {
 	dataInstalacao := ISO8601DateRegex.FindString(r.FormValue("data_instalacao"))
 	localID := first(strconv.ParseInt(r.FormValue("local_id"), 10, 64))
 	quantidade := first(strconv.ParseInt(r.FormValue("quantidade"), 10, 64))
-	status := first(strconv.ParseBool(r.FormValue("status")))
+
+	var status bool
+	if r.FormValue("status") == "" {
+		status = false
+	} else {
+		status, _ = strconv.ParseBool(r.FormValue("status"))
+	}
 
 	if errors := validateItem(descricao, bandaMaxima, bandaInstalada, dataInstalacao, quantidade, status); len(errors) > 0 {
 		w.Header().Set("Content-Type", "application/json")
