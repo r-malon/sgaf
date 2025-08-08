@@ -4,13 +4,15 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+	"strings"
 	"strconv"
 
 	"github.com/r-malon/sgaf/db"
 )
 
 func createValor(w http.ResponseWriter, r *http.Request) error {
-	valor := first(strconv.ParseInt(r.FormValue("valor"), 10, 64))
+	v := strings.ReplaceAll(strings.Trim(r.FormValue("valor"), " ,.0"), ".", "")
+	valor := first(strconv.ParseInt(v, 10, 64))
 	dataInicio := ISO8601DateRegex.FindString(r.FormValue("data_inicio"))
 	dataFim := ISO8601DateRegex.FindString(r.FormValue("data_fim"))
 	itemID := first(strconv.ParseInt(r.FormValue("item_id"), 10, 64))

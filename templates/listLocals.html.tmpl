@@ -1,8 +1,10 @@
 {{define "listLocals"}}
-<label for="local">Escolha um local: </label>
-<select name="local_id" id="local" class="form-select" required>
-	{{range .}}
-	<option value="{{.ID}}">{{.Nome}}</option>
-	{{end}}
-</select>
+<div id="local">
+	<label for="local_id">Escolha um local: </label>
+	<select name="local_id" id="local_id" class="form-select" required>
+		{{range .}}
+		<option value="{{.ID}}">{{.Nome}}</option>
+		{{end}}
+	</select>
+</div>
 {{end}}
