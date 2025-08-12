@@ -10,5 +10,6 @@ for f in schema/*; do
 done
 sqlite-history test.db AF Item Local Valor
 sqlc-1.25 generate
+pandoc SPECIFICATION.md --pdf-engine=weasyprint -o SPECIFICATION.pdf
 go build -ldflags=-s
 ```
